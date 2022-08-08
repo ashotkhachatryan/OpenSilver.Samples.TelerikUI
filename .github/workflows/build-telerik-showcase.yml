@@ -25,7 +25,7 @@ jobs:
           echo "${{ secrets.nuget_config }}" > Nuget.Config
       - name: ls
         run: |
-          ls -l
+          ls
           tail -500 Nuget.Config
       - name: Set directory environment variables
         if: "${{ github.event.inputs.opensilver-branch == 'develop' }}"
