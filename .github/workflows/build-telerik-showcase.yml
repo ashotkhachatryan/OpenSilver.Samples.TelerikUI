@@ -56,13 +56,15 @@ jobs:
           sed -i 's\myget_username\${{ secrets.MYGET_USERNAME }}\" />\g' Nuget.Config
           sed -i 's\myget_password\${{ secrets.MYGET_PASSWORD }}\" />\g' Nuget.Config
           sed -i 's\1.0.0.1\1.1.0-private-2022-07-30-013608-fc5acb98\g' OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI.csproj
+          sed -i 's\OpenSilver.Compatibility.TelerikUI\OpenSilver.Compatibility.TelerikUI.4.6\g' OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI.csproj
+          
       - name: ls
         run: |
           ls
           tail -500 TelerikShowcase/Nuget.Config
       - name: Restore Showcase packages
         run: |
-          nuget restore --force TelerikShowcase/OpenSilver.Samples.TelerikUI.sln --ignore-failed-sources
+          nuget restore TelerikShowcase/OpenSilver.Samples.TelerikUI.sln --ignore-failed-sources
       - name: Restore OpenSilver Packages
         run: |
           ./restore-packages-opensilver.bat
