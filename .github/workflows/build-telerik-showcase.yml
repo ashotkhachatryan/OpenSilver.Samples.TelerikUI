@@ -1,4 +1,4 @@
-name: OpenSilver Showcase Build
+name: Telerik Showcase Build
 
 env:
   virtual-directory: '/telerikshowcase/develop/'
@@ -22,7 +22,7 @@ jobs:
     steps:
       - name: Read Nuget.Config
         run: |
-          echo ${{ secrets.nuget_config }} > Nuget.Config
+          echo "${{ secrets.nuget_config }}" > Nuget.Config
       - name: ls
         run: |
           ls -l
