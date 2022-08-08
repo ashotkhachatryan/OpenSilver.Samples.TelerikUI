@@ -30,9 +30,6 @@ jobs:
         run: |
           echo "vdir=${{ env.virtual-directory-release }}" >> $env:GITHUB_ENV
           echo "apath=${{ env.app-path-release }}" >> $env:GITHUB_ENV
-      - name: PRINT VARIABLES
-        run: |
-          echo "VALUES ARE: '${{ env.vdir }}'"
       - uses: microsoft/setup-msbuild@v1.1
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v3.x
@@ -49,9 +46,15 @@ jobs:
         with:
           ref: ${{ github.ref }}
           path: './TelerikShowcase'
-      - name: Read Nuget.Config
+      - name: Replace Nuget.default.Config
+        working-directory: TelerikShowcase
         run: |
-          echo "${{ secrets.nuget_config }}" > TelerikShowcase/Nuget.Config
+          mv Nuget.default.Config Nuget.Config
+      - name: Replace text
+        working-directory: TelerikShowcase
+        run: |
+          sed -i 's\myget_username\${{ secrets.MYGET_USERNAME }}\" />\g' Nuget.Config
+          sed -i 's\myget_password\${{ secrets.MYGET_PASSWORD }}\" />\g' Nuget.Config
       - name: ls
         run: |
           ls
