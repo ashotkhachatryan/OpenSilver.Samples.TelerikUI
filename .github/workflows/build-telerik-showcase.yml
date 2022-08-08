@@ -64,7 +64,7 @@ jobs:
           tail -500 TelerikShowcase/Nuget.Config
       - name: Restore Showcase packages
         run: |
-          nuget restore TelerikShowcase/OpenSilver.Samples.TelerikUI.sln --ignore-failed-sources
+          nuget restore TelerikShowcase/OpenSilver.Samples.TelerikUI.sln
       - name: Restore OpenSilver Packages
         run: |
           ./restore-packages-opensilver.bat
