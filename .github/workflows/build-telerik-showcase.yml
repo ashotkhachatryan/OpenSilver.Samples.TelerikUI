@@ -20,13 +20,6 @@ jobs:
   OpenSilverShowcaseBuild:
     runs-on: windows-latest
     steps:
-      - name: Read Nuget.Config
-        run: |
-          echo "${{ secrets.nuget_config }}" > Nuget.Config
-      - name: ls
-        run: |
-          ls
-          tail -500 Nuget.Config
       - name: Set directory environment variables
         if: "${{ github.event.inputs.opensilver-branch == 'develop' }}"
         run: |
@@ -51,14 +44,21 @@ jobs:
         with:
           repository: OpenSilver/OpenSilver
           ref: ${{ github.event.inputs.opensilver-branch }}
-      - name: Clone OpenSilver Showcase
+      - name: Clone Telerik Showcase
         uses: actions/checkout@v2
         with:
           ref: ${{ github.ref }}
-          path: './Showcase'
+          path: './TelerikShowcase'
+      - name: Read Nuget.Config
+        run: |
+          echo "${{ secrets.nuget_config }}" > TelerikShowcase/Nuget.Config
+      - name: ls
+        run: |
+          ls
+          tail -500 TelerikShowcase/Nuget.Config
       - name: Restore Showcase packages
         run: |
-          nuget restore Showcase/OpenSilver.Samples.Showcase.sln
+          nuget restore TelerikShowcase/OpenSilver.Samples.TelerikUI.sln
       - name: Restore OpenSilver Packages
         run: |
           ./restore-packages-opensilver.bat
