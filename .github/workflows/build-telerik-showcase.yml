@@ -21,7 +21,8 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Read Nuget.Config
-        echo ${{ secrets.nuget_config }} > Nuget.Config
+        run: |
+          echo ${{ secrets.nuget_config }} > Nuget.Config
       - name: ls
         run: |
           ls -l
