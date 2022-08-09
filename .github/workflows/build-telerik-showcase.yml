@@ -53,7 +53,7 @@ jobs:
           sed -i 's\1.0.0\1.1.0-preview-2022-07-28-150415-62f22d76\g' OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI.Browser/OpenSilver.Samples.TelerikUI.Browser.csproj
       - name: Restore Showcase packages
         run: |
-          nuget restore TelerikShowcase/OpenSilver.Samples.TelerikUI.sln
+          nuget restore OpenSilver.Samples.TelerikUI.sln
       - name: Replace text
         run: |
           sed -i 's\<base href=\"/\" />\<base href=\"${{ env.vdir }}\" />\g' OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI.Browser/wwwroot/index.html
