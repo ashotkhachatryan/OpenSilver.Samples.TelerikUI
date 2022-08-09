@@ -58,7 +58,7 @@ jobs:
           sed -i 's\1.0.0.1\1.1.0-private-2022-08-06-104015-59af5103\g' OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI.csproj
           sed -i 's\OpenSilver.Compatibility.TelerikUI\OpenSilver.Compatibility.TelerikUI.4.6\g' OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI.csproj
           sed -i 's\1.0.0\1.1.0-preview-2022-07-28-150415-62f22d76\g' OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI.csproj
-          sed -i 's\1.0.0\1.1.0-preview-2022-07-28-150415-62f22d76\g' OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI.Browser/OpenSilver.Samples.TelerikUI.Browser.csproj
+          sed -i 's\1.0.0\1.1.0-preview-2022-07-28-150415-62f22d76\g' OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI.Browser/OpenSilver.Samples.TelerikUI.Browser.csproj
           
       - name: ls
         run: |
