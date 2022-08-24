@@ -15,6 +15,12 @@ on:
         description: 'OpenSilver branch to use'
         default: 'develop'
         required: true
+      choice:
+        type: choice
+        description: Version
+        options:
+          - release
+          - develop
 
 jobs:
   OpenSilverShowcaseBuild:
