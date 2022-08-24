@@ -11,10 +11,6 @@ env:
 on:
   workflow_dispatch:
     inputs:
-      opensilver-branch:
-        description: 'OpenSilver branch to use'
-        default: 'develop'
-        required: true
       telerik-version:
         description: 'Telerik version to use'
         default: '1.1.0-private-2022-08-06-104015-59af5103'
@@ -27,19 +23,19 @@ on:
         type: choice
         description: Telerik package options
         options:
-          - release
           - develop
+          - release
 
 jobs:
   OpenSilverShowcaseBuild:
     runs-on: windows-latest
     steps:
-      - name: Set directory environment variables
+      - name: Set directory environment variables develop
         if: "${{ github.event.inputs.telerik-options == 'develop' }}"
         run: |
           echo "vdir=${{ env.virtual-directory }}" >> $env:GITHUB_ENV
           echo "apath=${{ env.app-path }}" >> $env:GITHUB_ENV
-      - name: Set directory environment variables
+      - name: Set directory environment variables release
         if: "${{ github.event.inputs.telerik-options == 'release' }}"
         run: |
           echo "vdir=${{ env.virtual-directory-release }}" >> $env:GITHUB_ENV
