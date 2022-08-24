@@ -58,9 +58,9 @@ jobs:
         run: |
           nuget install OpenSilver.Compatibility.TelerikUI.4.6 -source https://www.myget.org/F/opensilver-private/api/v3/index.json -version ${{ github.event.inputs.telerik-version }} -output TelerikInstall
           ls TelerikInstall
-          $opensilver-version = ls TelerikInstall -Filter OpenSilver.1* | % { $_.name }
-          echo $opensilver-version
-          echo "::set-output name=opensilver-version::$opensilver-version"
+          $opensilver_version = ls TelerikInstall -Filter OpenSilver.1* | % { $_.name }
+          echo $opensilver_version
+          echo "::set-output name=opensilver-version::$opensilver_version"
       - name: Replace text
         run: |
           sed -i 's\myget_username\${{ secrets.MYGET_USERNAME }}\" />\g' Nuget.Config
