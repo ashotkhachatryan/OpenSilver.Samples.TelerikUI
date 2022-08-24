@@ -15,10 +15,6 @@ on:
         description: 'Telerik version to use'
         default: '1.1.0-private-2022-08-06-104015-59af5103'
         required: true
-      opensilver-version:
-        description: 'OpenSilver version to use'
-        default: '1.1.0-preview-2022-07-28-150415-62f22d76'
-        required: true
       telerik-options:
         type: choice
         description: Telerik package options
