@@ -66,6 +66,7 @@ jobs:
           echo $opensilver_version
           echo "::set-output name=opensilver-version::$opensilver_version"
       - name: Replace text
+        run: |
           sed -i 's\1.0.0.1\${{ github.event.inputs.telerik-version }}\g' OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI.csproj
           sed -i 's\OpenSilver.Compatibility.TelerikUI\OpenSilver.Compatibility.TelerikUI.4.6\g' OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI.csproj
           sed -i 's\1.0.0\${{ steps.vars.outputs.opensilver-version }}\g' OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI.csproj
