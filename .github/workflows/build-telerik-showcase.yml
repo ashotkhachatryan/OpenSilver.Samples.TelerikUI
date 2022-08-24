@@ -53,6 +53,10 @@ jobs:
       - name: Replace Nuget.default.Config
         run: |
           mv Nuget.default.Config Nuget.Config
+      - name: Replace text in Nuget.Config
+        run: |
+          sed -i 's\myget_username\${{ secrets.MYGET_USERNAME }}\" />\g' Nuget.Config
+          sed -i 's\myget_password\${{ secrets.MYGET_PASSWORD }}\" />\g' Nuget.Config
       - name: Get OpenSilver version
         id: vars
         run: |
@@ -62,9 +66,6 @@ jobs:
           echo $opensilver_version
           echo "::set-output name=opensilver-version::$opensilver_version"
       - name: Replace text
-        run: |
-          sed -i 's\myget_username\${{ secrets.MYGET_USERNAME }}\" />\g' Nuget.Config
-          sed -i 's\myget_password\${{ secrets.MYGET_PASSWORD }}\" />\g' Nuget.Config
           sed -i 's\1.0.0.1\${{ github.event.inputs.telerik-version }}\g' OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI.csproj
           sed -i 's\OpenSilver.Compatibility.TelerikUI\OpenSilver.Compatibility.TelerikUI.4.6\g' OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI.csproj
           sed -i 's\1.0.0\${{ steps.vars.outputs.opensilver-version }}\g' OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI.csproj
