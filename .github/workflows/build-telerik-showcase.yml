@@ -15,9 +15,17 @@ on:
         description: 'OpenSilver branch to use'
         default: 'develop'
         required: true
-      choice:
+      telerik-version:
+        description: 'Telerik version to use'
+        default: '1.1.0-private-2022-08-06-104015-59af5103'
+        required: true
+      opensilver-version:
+        description: 'OpenSilver version to use'
+        default: '1.1.0-preview-2022-07-28-150415-62f22d76'
+        required: true
+      telerik-options:
         type: choice
-        description: Version
+        description: Telerik package options
         options:
           - release
           - develop
@@ -27,12 +35,12 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Set directory environment variables
-        if: "${{ github.event.inputs.opensilver-branch == 'develop' }}"
+        if: "${{ github.event.inputs.telerik-options == 'develop' }}"
         run: |
           echo "vdir=${{ env.virtual-directory }}" >> $env:GITHUB_ENV
           echo "apath=${{ env.app-path }}" >> $env:GITHUB_ENV
       - name: Set directory environment variables
-        if: "${{ github.event.inputs.opensilver-branch == 'releases/OpenSilver/1.1.0' }}"
+        if: "${{ github.event.inputs.telerik-options == 'release' }}"
         run: |
           echo "vdir=${{ env.virtual-directory-release }}" >> $env:GITHUB_ENV
           echo "apath=${{ env.app-path-release }}" >> $env:GITHUB_ENV
