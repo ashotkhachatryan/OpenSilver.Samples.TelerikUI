@@ -60,7 +60,7 @@ jobs:
       - name: Get OpenSilver version
         id: vars
         run: |
-          nuget install OpenSilver.Compatibility.TelerikUI.4.6 -source https://www.myget.org/F/opensilver-private/api/v3/index.json -source https://www.myget.org/F/opensilver/api/v3/index.json -version ${{ github.event.inputs.telerik-version }} -output TelerikInstall
+          nuget install OpenSilver.Compatibility.TelerikUI.4.6 -source https://www.myget.org/F/opensilver-private/api/v3/index.json -source https://www.myget.org/F/opensilver/api/v3/index.json -source https://api.nuget.org/v3/index.json -version ${{ github.event.inputs.telerik-version }} -output TelerikInstall
           ls TelerikInstall
           $opensilver_version = ls TelerikInstall -Filter OpenSilver.1* | % { $_.name }
           echo $opensilver_version
