@@ -1,0 +1,82 @@
+name: Telerik Showcase Build
+
+env:
+  virtual-directory: '/telerikshowcase/develop/'
+  app-path: 'opensilverdemos/telerikshowcase/develop/'
+  virtual-directory-release: '/telerikshowcase/release/'
+  app-path-release: 'opensilverdemos/telerikshowcase/release/'
+  deploy-service-url: 'opensilverdemos.scm.azurewebsites.net:443'
+  next-release-version: '1.1.0'
+
+on:
+  workflow_dispatch:
+    inputs:
+      telerik-version:
+        description: 'Telerik version to use'
+        default: '1.1.0-private-2022-08-06-104015-59af5103'
+        required: true
+      telerik-options:
+        type: choice
+        description: Telerik package options
+        options:
+          - develop
+          - release
+
+jobs:
+  OpenSilverShowcaseBuild:
+    runs-on: windows-latest
+    steps:
+      - name: Set directory environment variables develop
+        if: "${{ github.event.inputs.telerik-options == 'develop' }}"
+        run: |
+          echo "vdir=${{ env.virtual-directory }}" >> $env:GITHUB_ENV
+          echo "apath=${{ env.app-path }}" >> $env:GITHUB_ENV
+      - name: Set directory environment variables release
+        if: "${{ github.event.inputs.telerik-options == 'release' }}"
+        run: |
+          echo "vdir=${{ env.virtual-directory-release }}" >> $env:GITHUB_ENV
+          echo "apath=${{ env.app-path-release }}" >> $env:GITHUB_ENV
+      - uses: microsoft/setup-msbuild@v1.1
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
+      - uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.202'
+      - name: Clone Telerik Showcase
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+      - name: Replace Nuget.default.Config
+        run: |
+          mv Nuget.default.Config Nuget.Config
+      - name: Replace text in Nuget.Config
+        run: |
+          sed -i 's\myget_username\${{ secrets.MYGET_USERNAME }}\" />\g' Nuget.Config
+          sed -i 's\myget_password\${{ secrets.MYGET_PASSWORD }}\" />\g' Nuget.Config
+      - name: Get OpenSilver version
+        id: vars
+        run: |
+          nuget install OpenSilver.Compatibility.TelerikUI.4.6 -source https://www.myget.org/F/opensilver-private/api/v3/index.json -source https://www.myget.org/F/opensilver/api/v3/index.json -source https://api.nuget.org/v3/index.json -version ${{ github.event.inputs.telerik-version }} -output TelerikInstall
+          ls TelerikInstall
+          $opensilver_version = ls TelerikInstall -Filter OpenSilver.1* | % { $_.name }
+          echo $opensilver_version
+          echo "::set-output name=opensilver-version::$opensilver_version.Split(".", 2)[1]"
+      - name: Replace text
+        run: |
+          sed -i 's\1.0.0.1\${{ github.event.inputs.telerik-version }}\g' OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI.csproj
+          sed -i 's\OpenSilver.Compatibility.TelerikUI\OpenSilver.Compatibility.TelerikUI.4.6\g' OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI.csproj
+          sed -i 's\1.0.0\${{ steps.vars.outputs.opensilver-version }}\g' OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI.csproj
+          sed -i 's\1.0.0\${{ steps.vars.outputs.opensilver-version }}\g' OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI.Browser/OpenSilver.Samples.TelerikUI.Browser.csproj
+          tail -1000 OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI.csproj
+      - name: Restore Showcase packages
+        run: |
+          nuget restore OpenSilver.Samples.TelerikUI.sln
+      - name: Replace text
+        run: |
+          sed -i 's\<base href=\"/\" />\<base href=\"${{ env.vdir }}\" />\g' OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI.Browser/wwwroot/index.html
+      - name: Replace UserName
+        run: |
+          sed -i 's\USERNAME\${{ secrets.OPENSILVERDEMOSUSERNAME }}\g' OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI.Browser/Properties/PublishProfiles/publish.pubxml
+      - name: Build and Deploy
+        run: |
+          msbuild OpenSilver.Samples.TelerikUI\OpenSilver.Samples.TelerikUI.Browser\OpenSilver.Samples.TelerikUI.Browser.csproj /p:DeployOnBuild=true /p:PublishProfile="OpenSilver.Samples.TelerikUI\OpenSilver.Samples.TelerikUI.Browser\Properties\PublishProfiles\publish.pubxml" /p:Password=${{ secrets.OPENSILVERDEMOSUSERPWD }} /p:DeployIisAppPath=${{ env.apath }} /p:MSDeployServiceURL=${{ env.deploy-service-url }} /p:Configuration=Release
