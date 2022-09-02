@@ -54,22 +54,13 @@ jobs:
           sed -i 's\myget_username\${{ secrets.MYGET_USERNAME }}\" />\g' Nuget.Config
           sed -i 's\myget_password\${{ secrets.MYGET_PASSWORD }}\" />\g' Nuget.Config
       - name: Get OpenSilver version
-        id: vars
         run: |
           nuget install OpenSilver.Compatibility.TelerikUI.4.6 -source https://www.myget.org/F/opensilver-private/api/v3/index.json -source https://www.myget.org/F/opensilver/api/v3/index.json -source https://api.nuget.org/v3/index.json -version ${{ github.event.inputs.telerik-version }} -output TelerikInstall
           ls TelerikInstall
           $opensilver_version = ls TelerikInstall -Filter OpenSilver.1* | % { $_.name }
-          echo $opensilver_version
-          echo $opensilver_version.Split(".", 2)[1]
           $opensilver_version = $opensilver_version.Split(".", 2)[1]
-          echo "osversion1=$(echo $opensilver_version)" >> $env:GITHUB_ENV
-          echo $osversion1
+          echo $opensilver_version
           echo "opensilver_version=$opensilver_version" >> $env:GITHUB_ENV
-          echo $opensilver_version
-          echo $opensilver_version
-      - name: PRINT VARIABLES
-        run: |
-          echo $osversion1
       - name: Replace text
         run: |
           sed -i 's\1.0.0.1\${{ github.event.inputs.telerik-version }}\g' OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI.csproj
