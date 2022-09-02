@@ -61,11 +61,16 @@ jobs:
           $opensilver_version = ls TelerikInstall -Filter OpenSilver.1* | % { $_.name }
           echo $opensilver_version
           echo $opensilver_version.Split(".", 2)[1]
-          echo "osversion=$opensilver_version.Split(".", 2)[1]" >> $env:GITHUB_ENV
-          echo "osversion=$(echo $opensilver_version.Split(".", 2)[1])" >> $env:GITHUB_ENV
-          echo $osversion
+          echo "osversion1=$(echo $opensilver_version)" >> $env:GITHUB_ENV
+          echo $osversion1
+          echo "osversion2=${{ opensilver_version }}" >> $env:GITHUB_ENV
+          echo $osversion2
           echo $opensilver_version
           echo "::set-output name=opensilver-version::$opensilver_version.Split(".", 2)[1]"
+      - name: PRINT VARIABLES
+        run: |
+          echo $osversion1
+          echo $osversion2
       - name: Replace text
         run: |
           sed -i 's\1.0.0.1\${{ github.event.inputs.telerik-version }}\g' OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI/OpenSilver.Samples.TelerikUI.csproj
