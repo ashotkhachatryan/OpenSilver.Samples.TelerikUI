@@ -63,7 +63,7 @@ jobs:
           echo $opensilver_version.Split(".", 2)[1]
           echo "osversion1=$(echo $opensilver_version)" >> $env:GITHUB_ENV
           echo $osversion1
-          echo "osversion2=${{ opensilver_version }}" >> $env:GITHUB_ENV
+          echo "osversion2=$opensilver_version" >> $env:GITHUB_ENV
           echo $osversion2
           echo $opensilver_version
           echo "::set-output name=opensilver-version::$opensilver_version.Split(".", 2)[1]"
