@@ -60,6 +60,7 @@ jobs:
           ls TelerikInstall
           $opensilver_version = ls TelerikInstall -Filter OpenSilver.1* | % { $_.name }
           echo $opensilver_version
+          echo $opensilver_version.Split(".", 2)[1]
           echo "::set-output name=opensilver-version::$opensilver_version.Split(".", 2)[1]"
       - name: Replace text
         run: |
